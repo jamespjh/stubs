@@ -1,0 +1,10 @@
+---
+- name: Git clone the stubs content to the server
+  # https://docs.ansible.com/ansible/latest/collections/ansible/builtin/git_module.html
+  ansible.builtin.git:
+    repo: https://github.com/jamespjh/stubs.git
+    dest: builds/clone
+  register: clone
+
+
+

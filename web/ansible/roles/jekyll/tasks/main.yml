@@ -1,0 +1,41 @@
+- name: Copy from the clone to a folder named for the sha
+  # We are building up every deployment as separate folders, so we don't overwrite them
+  ansible.builtin.copy:
+    remote_src: true
+    src: builds/clone/web/jekyll/
+    dest: builds/jekyll/{{ clone.after }}
+
+- name: Build the site
+  # Need to make this idempotent
+  ansible.builtin.shell:
+    chdir: builds/{{ clone.after }}
+    cmd: |
+      eval "$(rbenv init - bash)"
+      rbenv install -s `cat .ruby-version`
+      gem install bundler
+      bundle install
+      bundle exec jekyll build
+
+- name: Repoint the symlink to the latest clone
+  ansible.builtin.file:
+    src: /home/almalinux/builds/jekyll/{{ clone.after }}/_site
+    dest: /var/www/html/jekyll
+    state: link
+  notify: Restart httpd
+  become: true
+
+- name: Set the perms on the home folder so the read is allowed
+  ansible.builtin.file:
+    path: /home/almalinux
+    mode: '755'
+
+- name: Tell SELinux that the linked folder is A-OK
+  ansible.builtin.command: chcon -R -t httpd_sys_content_t /var/www/html/jekyll
+  become: true
+
+- name: Set up the apache config
+  become: true
+  ansible.builtin.copy:
+    src: jekyll.conf
+    dest: /etc/httpd/conf.d/jekyll.conf
+  notify: Restart httpd

@@ -1,0 +1,5 @@
+- name: Deploy stubs with web deployment to a VM
+  hosts: label_harvesterhci_io_vmName_web #or Whatever!
+  roles:
+    - stubs
+    - jekyll
