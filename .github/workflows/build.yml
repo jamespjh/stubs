@@ -39,7 +39,7 @@ jobs:
         run: |
           cd languages/python
           python -m venv venv
-          . venv/bin/activate
+          source venv/bin/activate
           pip install -e .
       - name: Test python stub
         run: |
