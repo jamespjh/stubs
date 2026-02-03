@@ -1,0 +1,15 @@
+Metadata-Version: 2.4
+Name: stub-gpu-python-project
+Version: 0.0.1
+Summary: Demonstrate GPU speedup with various tools
+Author-email: James Hetherington <j.hetherington@ucl.ac.uk>
+Classifier: Programming Language :: Python :: 3
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.9
+Description-Content-Type: text/markdown
+
+# Notes
+
+Various python GPU examples
+Assumes an NVidia GPU
+
