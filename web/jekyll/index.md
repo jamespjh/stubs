@@ -3,6 +3,6 @@ title: Stub Jekyll Website Exemplar
 layout: default
 ---
 
-## Introduction
+## Jekyll
 
 This is a stub website for Jekyll.
