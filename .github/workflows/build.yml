@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  
+
   jekyll:
     runs-on: ubuntu-latest
     steps:
@@ -23,3 +23,31 @@ jobs:
         run: |
           cd web/jekyll
           bundle exec jekyll build
+
+  python:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
+        run: |
+          pip install -r languages/python/requirements.txt
+      - name: Build python stub
+        run: |
+          cd languages/python
+          python -m venv venv
+          . venv/bin/activate
+          pip install -e .
+      - name: Test python stub
+        run: |
+          cd languages/python
+          . venv/bin/activate
+          pytest tests/
+      - name: Lint python stub
+        run: |
+          cd languages/python
+          . venv/bin/activate
+          flake8

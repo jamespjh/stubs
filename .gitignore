@@ -2,6 +2,7 @@ Gemfile.lock
 web/jekyll/_site/
 build/
 ansible/inventory_kubevirt.yml
-deploy_tests/test_venv/
-deploy_tests/.pytest_cache/
-deploy_tests/__pycache__/
+**/.pytest_cache/
+**/__pycache__/
+**/*venv
+.vscode

@@ -1,0 +1,9 @@
+Readme.md
+pyproject.toml
+src/stub_python_project.egg-info/PKG-INFO
+src/stub_python_project.egg-info/SOURCES.txt
+src/stub_python_project.egg-info/dependency_links.txt
+src/stub_python_project.egg-info/entry_points.txt
+src/stub_python_project.egg-info/top_level.txt
+src/stubpy/__init__.py
+src/stubpy/stubpy.py
