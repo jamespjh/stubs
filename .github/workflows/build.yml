@@ -41,7 +41,7 @@ jobs:
           python -m venv venv
           source venv/bin/activate
           pip install -e .
-          py.test
+          pip install pytest
       - name: Test python stub
         run: |
           cd languages/python
