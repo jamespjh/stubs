@@ -1,8 +1,9 @@
 import numpy as np
 import time
 
+
 class Timer:
-    def __init__(self, warmup = 10, repeat = 100):
+    def __init__(self, warmup=10, repeat=100):
         self.warmup = warmup
         self.repeat = repeat
 
@@ -14,10 +15,12 @@ class Timer:
             fn(*args)
         toc = time.perf_counter()
         return (toc - tic)/self.repeat
-    
+
+
 def benchmark(fn, *args):
     timer = Timer(warmup=3, repeat=5)
     return timer.timeit(fn, *args)
+
 
 def benchmark_range(fn, ordinates):
     timer = Timer(warmup=3, repeat=5)

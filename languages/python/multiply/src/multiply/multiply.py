@@ -7,20 +7,24 @@ from multiply.benchmark import benchmark
 
 logger = logging.getLogger(__name__)
 
+
 def entry():
     parser = argparse.ArgumentParser(
         description='Demonstrate GPU speedup')
     parser.add_argument("--loglevel", default='ERROR',
-                        help='Set the logging level (DEBUG, INFO, WARNING, ERROR, CRITICAL)')
+                        help='Set the logging level' +
+                        '(DEBUG, INFO, WARNING, ERROR, CRITICAL)')
     parser.add_argument("--size", type=int, default=1024,
-                        help='Matrix size to use for benchmark (default: 1024)')
+                        help='Matrix size to use for benchmark' +
+                        '(default: 1024)')
     args = parser.parse_args()
     logging.basicConfig(level=args.loglevel)
     logger.info("Using raw python backend")
     multiply_results(args.size)
 
+
 def multiply_results(size):
-    python = matmul(128,'python')*(size/128)**3
+    python = matmul(128, 'python')*(size/128)**3
     logger.info("Using numpy backend")
     numpy = matmul(size, 'numpy')
     print("Engine: Time/s:")
@@ -42,6 +46,7 @@ def multiply_results(size):
         logger.info("Metal not detected, skipping Metal benchmark")
         print("Metal : n/a")
 
+
 def detect_cuda():
     try:
         import cupy
@@ -49,12 +54,14 @@ def detect_cuda():
         return False
     return cupy.cuda.is_available()
 
+
 def detect_metal():
     try:
         import mlx.core as mx
     except ImportError:
         return False
     return mx.metal.is_available()
+
 
 def matmul(size, engine):
     x = matrix_at_size(size, engine)

@@ -1,4 +1,6 @@
+from pytest import raises
 from multiply.matrix_factory import random_matrix
+
 
 def test_python_factory():
     mat = random_matrix(10, engine='python')
@@ -8,15 +10,15 @@ def test_python_factory():
         for val in row:
             assert 0.0 <= val < 1.0
 
+
 def test_numpy_factory():
     mat = random_matrix(10, engine='numpy')
     assert mat.shape == (10, 10)
-    assert(all(mat.flatten() >= 0.0))
-    assert(all(mat.flatten() < 1.0))
+    assert (all(mat.flatten() >= 0.0))
+    assert (all(mat.flatten() < 1.0))
 
-from pytest import raises
 
 def test_invalid_engine():
     from multiply.matrix_factory import random_matrix
-    with raises(ValueError) as e:
-        mat = random_matrix(10, engine='invalid_engine')
+    with raises(ValueError):
+        random_matrix(10, engine='invalid_engine')
