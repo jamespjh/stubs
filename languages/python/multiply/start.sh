@@ -6,3 +6,4 @@ py.test
 flake8
 
 nvidia-smi -L
+# apple: system_profiler SPDisplaysDataType

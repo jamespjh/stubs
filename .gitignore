@@ -6,3 +6,5 @@ ansible/inventory_kubevirt.yml
 **/__pycache__/
 **/*venv
 .vscode
+**/.DS_Store
+**/*.egg-info/

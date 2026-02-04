@@ -5,12 +5,12 @@ requires = ["setuptools >= 77.0.3"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "stub-gpu-python-project"
+name = "stub-multiply-project"
 version = "0.0.1"
 authors = [
   { name="James Hetherington", email="j.hetherington@ucl.ac.uk" },
 ]
-description = "Demonstrate GPU speedup with various tools"
+description = "Demonstrate speedup with various tools for matrix multiplication"
 readme = "Readme.md"
 requires-python = ">=3.9"
 classifiers = [
@@ -21,5 +21,5 @@ dependencies = [
 ]
 
 [project.scripts]
-gputest = "gputest.gputest:entry"
+multiply = "multiply.multiply:entry"
 

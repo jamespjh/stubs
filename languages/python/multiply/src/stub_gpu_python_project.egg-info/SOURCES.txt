@@ -1,7 +1,12 @@
 Readme.md
 pyproject.toml
 src/gputest/__init__.py
+src/gputest/apple.py
+src/gputest/benchmark.py
 src/gputest/gputest.py
+src/gputest/matrix_factory.py
+src/gputest/payloads.py
+src/gputest/notebooks/__init__.py
 src/stub_gpu_python_project.egg-info/PKG-INFO
 src/stub_gpu_python_project.egg-info/SOURCES.txt
 src/stub_gpu_python_project.egg-info/dependency_links.txt

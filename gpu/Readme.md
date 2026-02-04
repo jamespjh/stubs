@@ -1,1 +1,0 @@
-This folder contains stubs that demonstrate GPU features in various languages, and prove some performance gain
