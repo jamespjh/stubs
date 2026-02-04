@@ -5,5 +5,11 @@ pip install -e .
 py.test
 flake8
 
-nvidia-smi -L
+pip install mlx # if on Apple GPU
+pip install cupy # if on NVIDIA GPU
+
+multiply
+# view jupyter notebook for figures
+
+#nvidia-smi -L
 # apple: system_profiler SPDisplaysDataType

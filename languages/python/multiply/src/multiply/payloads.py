@@ -1,4 +1,3 @@
-import mlx.core as mx
 from multiply.matrix_factory import matrix_at_size
 
 
@@ -12,7 +11,8 @@ def multiply_matrices(x, y, engine):
         raise ValueError(f"Unknown engine: {engine}")
     res = x @ y
     if engine == 'mlx':
-        return mx.eval(res)
+        import mlx.core as mx
+        return mx.eval(res) 
     else:
         return res
 
