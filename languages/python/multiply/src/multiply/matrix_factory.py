@@ -3,6 +3,10 @@
 from random import random
 import numpy as np
 
+max_rand_size = 8192
+max_size = 24576
+max_python_size = 512
+
 def random_matrix(size, engine):
     if engine == 'mlx':
         import mlx.core as mx
@@ -11,7 +15,6 @@ def random_matrix(size, engine):
     elif engine == 'cupy':
         pass
     elif engine == 'python':
-        max_python_size = 512
         if size > max_python_size:
             raise ValueError(f"Size {size} is too large for native-python. Maximum size is {max_python_size}.")
         return [[
@@ -32,8 +35,7 @@ def stack_matrices(copies, chunk, engine):
 
 def matrix_at_size(size, engine):
     # Construct in chunks to save time
-    max_rand_size = 8192
-    max_size = 24576
+
 
     if size > max_size:
         raise ValueError(f"Size {size} is too large. Maximum size is {max_size}.")
