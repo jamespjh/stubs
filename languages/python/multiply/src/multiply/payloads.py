@@ -1,22 +1,25 @@
+import numba
 from multiply.matrix_factory import matrix_at_size
 
+
 def python_multiply(x, y):
-   
+
     return [[
         sum([a * b for a, b in zip(row_x, col_y)])
-        for col_y in zip(*y)] 
+        for col_y in zip(*y)]
         for row_x in x]
 
-import numba
+
 @numba.njit
 def numba_python_multiply(x, y):
     yt = [[
         y[j][i] for j in range(len(y))]
-        for i in range(len(y[0]))] #zip(*y) will not numba jit
+        for i in range(len(y[0]))]  # zip(*y) will not numba jit
     return [[
         sum([a * b for a, b in zip(row_x, col_y)])
-        for col_y in yt] 
+        for col_y in yt]
         for row_x in x]
+
 
 def multiply_matrices(x, y, engine):
     if engine == 'python':
