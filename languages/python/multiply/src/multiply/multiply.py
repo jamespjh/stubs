@@ -56,7 +56,7 @@ def detect_metal():
         return False
     return mx.metal.is_available()
 
-def matmul(size=1024, engine='numpy'):
+def matmul(size, engine):
     x = matrix_at_size(size, engine)
     y = matrix_at_size(size, engine)
 

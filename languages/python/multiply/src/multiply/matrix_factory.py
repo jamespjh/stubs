@@ -3,7 +3,7 @@
 from random import random
 import numpy as np
 
-def random_matrix(size, engine = 'numpy'):
+def random_matrix(size, engine):
     if engine == 'mlx':
         import mlx.core as mx
         mx.set_default_device(mx.gpu)
@@ -20,15 +20,17 @@ def random_matrix(size, engine = 'numpy'):
             for _ in range(size)]
     elif engine == 'numpy':
         return np.random.uniform(size = (size, size))
+    raise ValueError(f"Unknown engine: {engine}")
     
-def stack_matrices(copies, chunk, engine = 'numpy'):
+def stack_matrices(copies, chunk, engine):
     if engine == 'mlx':
         import mlx.core as mx
         return mx.concatenate((mx.concatenate((chunk,)*3, axis=1),)*3, axis=0)
-    else:
+    elif engine == 'numpy':
         return np.hstack(np.vstack([chunk]*copies)*copies)
+    raise ValueError(f"Unknown engine: {engine}")
 
-def matrix_at_size(size, engine = 'numpy'):
+def matrix_at_size(size, engine):
     # Construct in chunks to save time
     max_rand_size = 8192
     max_size = 24576

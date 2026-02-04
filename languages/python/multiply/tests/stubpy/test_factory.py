@@ -13,3 +13,10 @@ def test_numpy_factory():
     assert mat.shape == (10, 10)
     assert(all(mat.flatten() >= 0.0))
     assert(all(mat.flatten() < 1.0))
+
+from pytest import raises
+
+def test_invalid_engine():
+    from multiply.matrix_factory import random_matrix
+    with raises(ValueError) as e:
+        mat = random_matrix(10, engine='invalid_engine')
