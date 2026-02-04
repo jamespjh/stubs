@@ -14,23 +14,26 @@ def entry():
     parser.add_argument("--loglevel", default='ERROR',
                         help='Set the logging level' +
                         '(DEBUG, INFO, WARNING, ERROR, CRITICAL)')
-    parser.add_argument("--size", type=int, default=1024,
+    parser.add_argument("--size", type=int, default=256,
                         help='Matrix size to use for benchmark' +
-                        '(default: 1024)')
+                        '(default: 256)')
     args = parser.parse_args()
     logging.basicConfig(level=args.loglevel)
-    logger.info("Using raw python backend")
     multiply_results(args.size)
 
 
 def multiply_results(size):
-    python = matmul(128, 'python')*(size/128)**3
+    logger.info("Using python backend")
+    python = matmul(size, 'python')
     logger.info("Using numpy backend")
     numpy = matmul(size, 'numpy')
+    logger.info("Using numba backend")
+    numba = matmul(size, 'numba')
     print("Engine: Time/s:")
     print("---------------")
-    print(f"Python: {python:.3g} (extrapolated)")
+    print(f"Python: {python:.3g}")
     print(f"NumPy : {numpy:.3g}")
+    print(f"Numba : {numba:.3g}")
     if detect_cuda():
         logger.info("Using CUDA backend")
         cupy = matmul(size, 'cupy')

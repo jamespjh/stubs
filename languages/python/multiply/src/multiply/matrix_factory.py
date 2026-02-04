@@ -5,8 +5,24 @@ import numpy as np
 
 max_rand_size = 8192
 max_size = 24576
-max_python_size = 512
+max_python_size = 1024
 
+
+def random_python_matrix(size):    
+    return [[
+        random()
+    for _ in range(size)]
+    for _ in range(size)]
+
+import numba
+@numba.njit
+def numba_python_matrix(size):
+    return numba.typed.List([
+        numba.typed.List([
+        random()
+    for _ in range(size)])
+    for _ in range(size)])
+    
 
 def random_matrix(size, engine):
     if engine == 'mlx':
@@ -19,10 +35,10 @@ def random_matrix(size, engine):
         if size > max_python_size:
             raise ValueError(f"Size {size} is too large for native-python." +
                              f"Maximum size is {max_python_size}.")
-        return [[
-            random()
-            for _ in range(size)]
-            for _ in range(size)]
+        return random_python_matrix(size)
+    elif engine == 'numba':
+        import numba
+        return numba_python_matrix(size)
     elif engine == 'numpy':
         return np.random.uniform(size=(size, size))
     raise ValueError(f"Unknown engine: {engine}")
