@@ -34,26 +34,60 @@ jobs:
           python-version: '3.x'
       - name: Install dependencies
         run: |
-          pip install -r languages/python/requirements.txt
+          pip install -r languages/python/basic/requirements.txt
       - name: Build python stub
         run: |
-          cd languages/python
+          cd languages/python/basic
           python -m venv venv
           source venv/bin/activate
           pip install -e .
           pip install pytest
       - name: Test python stub
         run: |
-          cd languages/python
+          cd languages/python/basic
           source venv/bin/activate
           py.test
       - name: Lint python stub
         run: |
-          cd languages/python
+          cd languages/python/basic
           source venv/bin/activate
           flake8
       - name: Execute python stub
         run: |
-          cd languages/python
+          cd languages/python/basic
           . venv/bin/activate
           stubpy
+
+  multiply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+      - name: Install dependencies
+        run: |
+          pip install -r languages/python/multiply/requirements.txt
+      - name: Build python stub
+        run: |
+          cd languages/python/multiply
+          python -m venv venv
+          source venv/bin/activate
+          pip install -e .
+          pip install pytest
+      - name: Test python stub
+        run: |
+          cd languages/python/multiply
+          source venv/bin/activate
+          py.test
+      - name: Lint python stub
+        run: |
+          cd languages/python/multiply
+          source venv/bin/activate
+          flake8
+      - name: Execute multiply stub
+        run: |
+          cd languages/python/multiply
+          . venv/bin/activate
+          multiply --loglevel DEBUG

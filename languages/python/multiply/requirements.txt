@@ -21,8 +21,6 @@ kiwisolver==1.4.9
 matplotlib==3.10.8
 matplotlib-inline==0.2.1
 mccabe==0.7.0
-mlx==0.30.5
-mlx-metal==0.30.5
 nest-asyncio==1.6.0
 numpy==2.4.1
 packaging==25.0
@@ -45,7 +43,6 @@ pyzmq==27.1.0
 scipy==1.17.0
 six==1.17.0
 stack-data==0.6.3
-stub-gpu-python-project==0.0.1
 tornado==6.5.4
 traitlets==5.14.3
 wcwidth==0.2.14

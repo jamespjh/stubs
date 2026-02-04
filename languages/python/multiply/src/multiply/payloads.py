@@ -12,7 +12,7 @@ def multiply_matrices(x, y, engine):
     res = x @ y
     if engine == 'mlx':
         import mlx.core as mx
-        return mx.eval(res) 
+        return mx.eval(res)
     else:
         return res
 
