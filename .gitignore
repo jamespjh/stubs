@@ -1,10 +1,15 @@
+#Ruby
 Gemfile.lock
 web/jekyll/_site/
 build/
+#Ansible
 ansible/inventory_kubevirt.yml
+#Python
 **/.pytest_cache/
 **/__pycache__/
 **/*venv
 .vscode
 **/.DS_Store
 **/*.egg-info/
+#Lean
+**/.lake/
