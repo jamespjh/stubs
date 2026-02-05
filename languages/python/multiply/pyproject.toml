@@ -18,7 +18,7 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 dependencies = [
-    "numpy", "scipy"
+    "numpy", "scipy", "numba"
 ]
 
 [project.scripts]
