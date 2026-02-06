@@ -1,9 +1,14 @@
 name = "basic"
 version = "0.1.0"
 defaultTargets = ["basic"]
+testDriver = "Tests"
 
 [[lean_lib]]
 name = "Basic"
+
+[[lean_lib]]
+name = "Tests"
+dependencies = ["Basic"]
 
 [[lean_exe]]
 name = "basic"
