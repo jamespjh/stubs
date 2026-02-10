@@ -8,8 +8,9 @@ name = "Basic"
 
 [[lean_lib]]
 name = "Tests"
-dependencies = ["Basic"]
+needs = ["Basic"]
 
 [[lean_exe]]
 name = "basic"
 root = "Main"
+
