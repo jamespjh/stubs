@@ -8,6 +8,17 @@ max_rand_size = 8192
 max_size = 24576
 max_python_size = 1024
 
+import jax.random as jrandom
+import jax.numpy as jnp
+
+key = jrandom.key(0)
+
+
+def jax_random_matrix(size):
+    global key
+    key, subkey = jrandom.split(key)
+    return jrandom.uniform(subkey, shape=(size, size))
+
 
 def random_python_matrix(size):
     return [[
@@ -30,6 +41,8 @@ def random_matrix(size, engine):
         import mlx.core as mx
         mx.set_default_device(mx.gpu)
         return mx.random.uniform(shape=(size, size))
+    elif engine == 'jax':
+        return jax_random_matrix(size)
     elif engine == 'cupy':
         pass
     elif engine == 'python':

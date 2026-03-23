@@ -26,7 +26,7 @@ def multiply_matrices(x, y, engine):
         return python_multiply(x, y)
     if engine == 'numba':
         return numba_python_multiply(x, y)
-    if engine not in ['mlx', 'numpy']:
+    if engine not in ['mlx', 'numpy', 'jax', 'cupy']:
         raise ValueError(f"Unknown engine: {engine}")
     res = x @ y
     if engine == 'mlx':
