@@ -1,4 +1,5 @@
 from multiply.benchmark import benchmark_range, benchmark
+from multiply.multiply import detect_jax, detect_cuda, detect_metal
 import numpy as np
 
 
@@ -15,3 +16,24 @@ def test_benchmark_range():
     results = benchmark_range(spin, sizes)
     assert results.shape == (2, sizes.shape[0])
     assert all(results[0, :] > 0)
+
+def test_timer():
+    from multiply.benchmark import Timer
+    timer = Timer(warmup=1, repeat=3)
+    time = timer.timeit(spin, 10000)
+    assert time > 0
+
+def t_timer_engine(engine):
+    from multiply.benchmark import Timer
+    timer = Timer(warmup=1, repeat=3)
+    time = timer.timeit_engine(spin, 10000, engine=engine)
+    assert time > 0
+
+if detect_jax():
+    def test_jax_timer():
+        t_timer_engine('jax')
+
+if detect_cuda():
+    def test_cupy_timer():
+        t_timer_engine('cupy')
+

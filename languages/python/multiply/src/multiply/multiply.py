@@ -68,6 +68,13 @@ def detect_metal():
         return False
     return mx.metal.is_available()
 
+def detect_jax():
+    try:
+        import jax
+    except ImportError:
+        return False
+    return True
+
 
 def matmul(size, engine):
     x = matrix_at_size(size, engine)

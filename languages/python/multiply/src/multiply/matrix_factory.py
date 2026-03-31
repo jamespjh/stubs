@@ -63,7 +63,12 @@ def stack_matrices(copies, chunk, engine):
         import mlx.core as mx
         return mx.concatenate((mx.concatenate((chunk,)*3, axis=1),)*3, axis=0)
     elif engine == 'numpy':
-        return np.hstack(np.vstack([chunk]*copies)*copies)
+        return np.concatenate((np.concatenate((chunk,)*3, axis=1),)*3, axis=0)
+    elif engine == 'cupy':
+        import cupy as cp
+        return cp.concatenate((cp.concatenate((chunk,)*3, axis=1),)*3, axis=0)
+    elif engine == 'jax':
+        return jnp.concatenate((jnp.concatenate((chunk,)*3, axis=1),)*3, axis=0)
     raise ValueError(f"Unknown engine: {engine}")
 
 
