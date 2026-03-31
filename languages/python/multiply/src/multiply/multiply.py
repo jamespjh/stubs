@@ -3,7 +3,7 @@ import logging
 
 from multiply.payloads import matrix_at_size
 from multiply.payloads import multiply_matrices
-from multiply.benchmark import benchmark
+from multiply.benchmark import benchmark, cupy_benchmark
 
 logger = logging.getLogger(__name__)
 
@@ -72,5 +72,8 @@ def detect_metal():
 def matmul(size, engine):
     x = matrix_at_size(size, engine)
     y = matrix_at_size(size, engine)
+
+    if engine == 'cupy':
+        return cupy_benchmark(multiply_matrices, x, y, engine)
 
     return benchmark(multiply_matrices, x, y, engine)

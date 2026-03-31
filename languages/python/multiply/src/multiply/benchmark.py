@@ -21,6 +21,13 @@ def benchmark(fn, *args):
     timer = Timer(warmup=3, repeat=5)
     return timer.timeit(fn, *args)
 
+def cupy_benchmark(fn, *args):
+    from cupyx.profiler import benchmark
+    res= benchmark(fn, n_repeat = 5, n_warmup = 3, args=args)
+    cpu = res.cpu_times.mean()
+    gpu = res.gpu_times.mean()
+    return max(cpu, gpu)  # Return the maximum of CPU and GPU time as the benchmark result
+
 
 def benchmark_range(fn, ordinates):
     timer = Timer(warmup=3, repeat=5)
