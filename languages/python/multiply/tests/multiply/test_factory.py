@@ -22,3 +22,10 @@ def test_invalid_engine():
     from multiply.matrix_factory import random_matrix
     with raises(ValueError):
         random_matrix(10, engine='invalid_engine')
+
+
+def test_jax_factory():
+    mat = random_matrix(10, engine='jax')
+    assert mat.shape == (10, 10)
+    assert (all(mat.flatten() >= 0.0))
+    assert (all(mat.flatten() < 1.0))

@@ -17,3 +17,11 @@ def test_payload_numpy():
     size = 10
     result = multiply_at_size(size, engine='numpy')
     assert result.shape == (size, size)
+
+
+def test_payload_jax():
+    from multiply.payloads import multiply_at_size
+
+    size = 10
+    result = multiply_at_size(size, engine='jax')
+    assert result.shape == (size, size)
