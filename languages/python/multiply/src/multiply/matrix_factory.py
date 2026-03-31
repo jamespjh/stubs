@@ -31,7 +31,8 @@ def random_matrix(size, engine):
         mx.set_default_device(mx.gpu)
         return mx.random.uniform(shape=(size, size))
     elif engine == 'cupy':
-        pass
+        import cupy as cp
+        return cp.random.uniform(size=(size, size))
     elif engine == 'python':
         if size > max_python_size:
             raise ValueError(f"Size {size} is too large for native-python." +
