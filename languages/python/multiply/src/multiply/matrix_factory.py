@@ -1,75 +1,19 @@
 # Scale up and modularise
 
-import numba
-from random import random
-import numpy as np
+from .array_abstraction import ArrayAbstraction
 
 max_rand_size = 8192
 max_size = 24576
-max_python_size = 1024
-
-import jax.random as jrandom
-import jax.numpy as jnp
-
-key = jrandom.key(0)
-
-
-def jax_random_matrix(size):
-    global key
-    key, subkey = jrandom.split(key)
-    return jrandom.uniform(subkey, shape=(size, size))
-
-
-def random_python_matrix(size):
-    return [[
-        random()
-        for _ in range(size)]
-        for _ in range(size)]
-
-
-@numba.njit
-def numba_python_matrix(size):
-    return numba.typed.List([
-        numba.typed.List([
-            random()
-            for _ in range(size)])
-        for _ in range(size)])
 
 
 def random_matrix(size, engine):
-    if engine == 'mlx':
-        import mlx.core as mx
-        mx.set_default_device(mx.gpu)
-        return mx.random.uniform(shape=(size, size))
-    elif engine == 'jax':
-        return jax_random_matrix(size)
-    elif engine == 'cupy':
-        import cupy as cp
-        return cp.random.uniform(size=(size, size))
-    elif engine == 'python':
-        if size > max_python_size:
-            raise ValueError(f"Size {size} is too large for native-python." +
-                             f"Maximum size is {max_python_size}.")
-        return random_python_matrix(size)
-    elif engine == 'numba':
-        return numba_python_matrix(size)
-    elif engine == 'numpy':
-        return np.random.uniform(size=(size, size))
-    raise ValueError(f"Unknown engine: {engine}")
+    return ArrayAbstraction(engine).random_array(
+        (size, size), min=0.0, max=1.0)
 
 
 def stack_matrices(copies, chunk, engine):
-    if engine == 'mlx':
-        import mlx.core as mx
-        return mx.concatenate((mx.concatenate((chunk,)*3, axis=1),)*3, axis=0)
-    elif engine == 'numpy':
-        return np.concatenate((np.concatenate((chunk,)*3, axis=1),)*3, axis=0)
-    elif engine == 'cupy':
-        import cupy as cp
-        return cp.concatenate((cp.concatenate((chunk,)*3, axis=1),)*3, axis=0)
-    elif engine == 'jax':
-        return jnp.concatenate((jnp.concatenate((chunk,)*3, axis=1),)*3, axis=0)
-    raise ValueError(f"Unknown engine: {engine}")
+    np = ArrayAbstraction(engine).np
+    return np.concatenate((np.concatenate((chunk,) * 3, axis=1),) * 3, axis=0)
 
 
 def matrix_at_size(size, engine):

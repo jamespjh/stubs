@@ -1,5 +1,6 @@
 import numba
 from multiply.matrix_factory import matrix_at_size
+from multiply.array_abstraction import valid_engines, mlx_engines
 
 
 def python_multiply(x, y):
@@ -26,10 +27,10 @@ def multiply_matrices(x, y, engine):
         return python_multiply(x, y)
     if engine == 'numba':
         return numba_python_multiply(x, y)
-    if engine not in ['mlx', 'numpy', 'jax', 'cupy']:
+    if engine not in valid_engines:
         raise ValueError(f"Unknown engine: {engine}")
     res = x @ y
-    if engine == 'mlx':
+    if engine in mlx_engines:
         import mlx.core as mx
         return mx.eval(res)
     else:

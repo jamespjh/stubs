@@ -68,9 +68,10 @@ def detect_metal():
         return False
     return mx.metal.is_available()
 
+
 def detect_jax():
     try:
-        import jax
+        pass
     except ImportError:
         return False
     return True
