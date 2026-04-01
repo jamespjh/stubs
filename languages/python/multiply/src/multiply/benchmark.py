@@ -28,10 +28,10 @@ class Timer:
 
     def timeit_jax(self, fn, *args):
         import jax
-        fn = lambda *args: jax.block_until_ready(fn(*args))
-        return self.timeit(fn, *args)
+        ffn = lambda *args: jax.block_until_ready(fn(*args))
+        return self.timeit(ffn, *args)
 
-    def timeit_engine(self, fn, *args, engine=None):
+    def timeit_engine(self, fn, engine=None, *args):
         if engine in ['cupy']:
             return self.timeit_cu(fn, *args)
         if engine in jax_engines:
@@ -39,15 +39,19 @@ class Timer:
         else:
             return self.timeit(fn, *args)
 
-def benchmark_range(fn, ordinates, engine=None):
+def benchmark_range(fn, ordinates, engine):
     timer = Timer(warmup=3, repeat=5)
     # measure a function, which takes a variety of matrices as inputs
     times = np.vectorize(
         lambda x: timer.timeit_engine(
-            fn, x, engine=engine))(
+            fn, engine, x))(
         ordinates.astype(int))
     return np.vstack([ordinates, times])
 
-def benchmark(fn, *args, engine=None):
+def benchmark(fn, *args):
     timer = Timer(warmup=3, repeat=5)
-    return timer.timeit_engine(fn, *args, engine=engine)
+    return timer.timeit(fn, *args)
+
+def benchmark_engine(fn, engine, *args):
+    timer = Timer(warmup=3, repeat=5)
+    return timer.timeit_engine(fn, engine, *args)

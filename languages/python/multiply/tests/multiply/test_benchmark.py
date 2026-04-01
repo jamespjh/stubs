@@ -13,7 +13,7 @@ def test_benchmark():
 
 def test_benchmark_range():
     sizes = 10**np.arange(1, 4)
-    results = benchmark_range(spin, sizes)
+    results = benchmark_range(spin, sizes, None)
     assert results.shape == (2, sizes.shape[0])
     assert all(results[0, :] > 0)
 
@@ -28,7 +28,7 @@ def test_timer():
 def t_timer_engine(engine):
     from multiply.benchmark import Timer
     timer = Timer(warmup=1, repeat=3)
-    time = timer.timeit_engine(spin, 10000, engine=engine)
+    time = timer.timeit_engine(spin, engine, 10000)
     assert time > 0
 
 

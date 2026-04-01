@@ -3,7 +3,7 @@ import logging
 
 from multiply.payloads import matrix_at_size
 from multiply.payloads import multiply_matrices
-from multiply.benchmark import benchmark
+from multiply.benchmark import benchmark_engine
 
 logger = logging.getLogger(__name__)
 
@@ -84,4 +84,4 @@ def matmul(size, engine):
     x = matrix_at_size(size, engine)
     y = matrix_at_size(size, engine)
 
-    return benchmark(multiply_matrices, x, y, engine)
+    return benchmark_engine(multiply_matrices, engine, x, y, engine)
