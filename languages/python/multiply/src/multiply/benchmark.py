@@ -1,5 +1,6 @@
 import numpy as np
 import time
+from .array_abstraction import jax_engines, valid_engines, mlx_engines
 
 
 class Timer:
@@ -19,35 +20,24 @@ class Timer:
     def timeit_cu(self, fn, *args):
         from cupyx.profiler import benchmark
         res = benchmark(
-            fn,
-            n_repeat=self.repeat,
-            n_warmup=self.warmup,
-            args=args)
+            fn, n_repeat=self.repeat, n_warmup=self.warmup, args=args)
         cpu = res.cpu_times.mean()
         gpu = res.gpu_times.mean()
         # Return the maximum of CPU and GPU time as the benchmark result
         return max(cpu, gpu)
 
+    def timeit_jax(self, fn, *args):
+        import jax
+        fn = lambda *args: jax.block_until_ready(fn(*args))
+        return self.timeit(fn, *args)
+
     def timeit_engine(self, fn, *args, engine=None):
-        if engine in ['cupy', 'jax']:
+        if engine in ['cupy']:
             return self.timeit_cu(fn, *args)
+        if engine in jax_engines:
+            return self.timeit_jax(fn, *args)
         else:
             return self.timeit(fn, *args)
-
-
-def benchmark(fn, *args):
-    timer = Timer(warmup=3, repeat=5)
-    return timer.timeit(fn, *args)
-
-
-def cupy_benchmark(fn, *args):
-    from cupyx.profiler import benchmark
-    res = benchmark(fn, n_repeat=5, n_warmup=3, args=args)
-    cpu = res.cpu_times.mean()
-    gpu = res.gpu_times.mean()
-    # Return the maximum of CPU and GPU time as the benchmark result
-    return max(cpu, gpu)
-
 
 def benchmark_range(fn, ordinates, engine=None):
     timer = Timer(warmup=3, repeat=5)
@@ -57,3 +47,7 @@ def benchmark_range(fn, ordinates, engine=None):
             fn, x, engine=engine))(
         ordinates.astype(int))
     return np.vstack([ordinates, times])
+
+def benchmark(fn, *args, engine=None):
+    timer = Timer(warmup=3, repeat=5)
+    return timer.timeit_engine(fn, *args, engine=engine)

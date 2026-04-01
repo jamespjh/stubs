@@ -3,7 +3,7 @@ import logging
 
 from multiply.payloads import matrix_at_size
 from multiply.payloads import multiply_matrices
-from multiply.benchmark import benchmark, cupy_benchmark
+from multiply.benchmark import benchmark
 
 logger = logging.getLogger(__name__)
 
@@ -30,27 +30,30 @@ def multiply_results(size):
     logger.info("Using numba backend")
     numba = matmul(size, 'numba')
     logger.info("Using JAX backend")
-    jax = matmul(size, 'jax')
+    jaxc = matmul(size, 'jax-cpu')
+    logger.info("Using JAX GPU backend")
+    jaxg = matmul(size, 'jax-gpu')
     print("Engine: Time/s:")
     print("---------------")
-    print(f"Python: {python:.3g}")
-    print(f"NumPy : {numpy:.3g}")
-    print(f"Numba : {numba:.3g}")
-    print(f"JAX   : {jax:.3g}")
+    print(f"Python : {python:.3g}")
+    print(f"NumPy  : {numpy:.3g}")
+    print(f"Numba  : {numba:.3g}")
+    print(f"JAX-CPU: {jaxc:.3g}")
+    print(f"JAX-GPU: {jaxg:.3g}")
     if detect_cuda():
         logger.info("Using CUDA backend")
         cupy = matmul(size, 'cupy')
-        print(f"CuPy  : {cupy:.3g}")
+        print(f"CuPy   : {cupy:.3g}")
     else:
         logger.info("CUDA not detected, skipping CuPy benchmark")
-        print("CuPy  : n/a")
+        print("CuPy   : n/a")
     if detect_metal():
         logger.info("Using Metal backend")
         metal = matmul(size, 'mlx')
-        print(f"Metal : {metal:.3g}")
+        print(f"Metal  : {metal:.3g}")
     else:
         logger.info("Metal not detected, skipping Metal benchmark")
-        print("Metal : n/a")
+        print("Metal  : n/a")
 
 
 def detect_cuda():
