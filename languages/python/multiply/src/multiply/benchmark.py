@@ -1,7 +1,6 @@
 import numpy as np
 import time
-from .array_abstraction import jax_engines, valid_engines, mlx_engines
-
+from .array_abstraction import jax_engines, valid_engines, mlx_engines, torch_engines
 
 class Timer:
     def __init__(self, warmup=10, repeat=100):
@@ -32,21 +31,12 @@ class Timer:
         return self.timeit(ffn, *args)
 
     def timeit_engine(self, fn, engine=None, *args):
-        if engine in ['cupy']:
+        if engine in ['cupy','torch-gpu']:
             return self.timeit_cu(fn, *args)
         if engine in jax_engines:
             return self.timeit_jax(fn, *args)
         else:
             return self.timeit(fn, *args)
-
-def benchmark_range(fn, ordinates, engine):
-    timer = Timer(warmup=3, repeat=5)
-    # measure a function, which takes a variety of matrices as inputs
-    times = np.vectorize(
-        lambda x: timer.timeit_engine(
-            fn, engine, x))(
-        ordinates.astype(int))
-    return np.vstack([ordinates, times])
 
 def benchmark(fn, *args):
     timer = Timer(warmup=3, repeat=5)

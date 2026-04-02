@@ -1,5 +1,5 @@
-from multiply.benchmark import benchmark_range, benchmark
-from multiply.multiply import detect_cuda, detect_jax
+from multiply.benchmark import benchmark
+from multiply.multiply import detect_cuda
 import numpy as np
 
 
@@ -9,13 +9,6 @@ def spin(N):
 
 def test_benchmark():
     assert (benchmark(spin, 10000) > benchmark(spin, 1000))
-
-
-def test_benchmark_range():
-    sizes = 10**np.arange(1, 4)
-    results = benchmark_range(spin, sizes, None)
-    assert results.shape == (2, sizes.shape[0])
-    assert all(results[0, :] > 0)
 
 
 def test_timer():
@@ -31,11 +24,18 @@ def t_timer_engine(engine):
     time = timer.timeit_engine(spin, engine, 10000)
     assert time > 0
 
+def test_jax_timer():
+    t_timer_engine('jax-cpu')
 
-if detect_jax():
-    def test_jax_timer():
-        t_timer_engine('jax')
+def test_torch_timer():
+    t_timer_engine('torch-cpu')
 
 if detect_cuda():
     def test_cupy_timer():
         t_timer_engine('cupy')
+
+    def test_torch_gpu_timer():
+        t_timer_engine('torch-gpu')
+
+    def test_jax_gpu_timer():
+        t_timer_engine('jax-gpu')

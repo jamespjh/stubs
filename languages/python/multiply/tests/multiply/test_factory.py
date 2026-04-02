@@ -29,6 +29,14 @@ def t_stack_matrices(engine):
 def test_numpy_factory():
     t_factory('numpy')
 
+def test_torch_factory():
+    t_factory('torch-cpu')
+
+def test_stack_matrices():
+    t_stack_matrices('numpy')
+
+def test_torch_stack_matrices():    
+    t_stack_matrices('torch-cpu')
 
 def test_invalid_engine():
     from multiply.matrix_factory import random_matrix
@@ -49,6 +57,12 @@ if detect_cuda():
 
     def test_stack_cupy_matrices():
         t_stack_matrices('cupy')
+
+    def test_torch_gpu_factory():
+        t_factory('torch-gpu')
+
+    def test_stack_torch_gpu_matrices():
+        t_stack_matrices('torch-gpu')
 
 if detect_metal():
     def test_metal_factory():

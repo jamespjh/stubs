@@ -17,7 +17,7 @@ classifiers = [
     "Programming Language :: Python :: 3",
     "Operating System :: OS Independent",
 ] 
-dependencies = [ "torch", "torchvision", "matplotlib" ] 
+dependencies = [ "torch", "torchvision", "gpytorch", "matplotlib" ] 
 
 [project.optional-dependencies] 
 dev = ["pytest","flake8", "ipykernel"]

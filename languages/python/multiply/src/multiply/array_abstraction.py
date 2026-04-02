@@ -7,11 +7,12 @@ from functools import reduce
 
 jax_engines = ['jax-cpu', 'jax-gpu', 'jax-metal']
 mlx_engines = ['mlx-cpu', 'mlx-gpu']
+torch_engines = ['torch-cpu', 'torch-gpu']
 valid_engines = [
     'python',
     'numba',
     'numpy',
-    'cupy'] + jax_engines + mlx_engines
+    'cupy'] + jax_engines + mlx_engines + torch_engines
 
 def random_python_matrix(size):
     if len(size) != 2:
@@ -49,6 +50,11 @@ class ArrayAbstraction:
             import cupy as cp
             self.np = cp
             self.random = cp.random
+        elif engine in torch_engines:
+            import torch
+            self.np = torch
+            self.np.array = torch.as_tensor
+            self.random = torch.rand
         elif engine in jax_engines:
             import jax.numpy as jnp
             import jax.random as jrandom
@@ -79,6 +85,8 @@ class ArrayAbstraction:
         res = self.np.array(data)
         if self.engine in ['jax-cpu', 'jax-gpu', 'jax-metal']:
             res = jax.device_put(res, self.jax_device)
+        if self.engine == 'torch-gpu':
+            res = res.to('cuda')
         return res
 
     def random_array(self, shape, min=0.0, max=1.0):
@@ -104,7 +112,55 @@ class ArrayAbstraction:
         elif self.engine in mlx_engines:
             res = self.random.uniform(shape=shape, low=min, high=max)
             return res
+        elif self.engine in torch_engines:
+            res = self.random(size=shape) * (max - min) + min
+            if self.engine == 'torch-gpu':
+                res = res.to('cuda')
+            return res
         else:
             raise ValueError(
                 f"Unknown engine '{self.engine}'."
                 f"Valid engines: {valid_engines}.")
+
+
+def detect_cuda():
+    try:
+        import cupy
+    except ImportError:
+        return False
+    return cupy.cuda.is_available()
+
+
+def detect_metal():
+    try:
+        import mlx.core as mx
+    except ImportError:
+        return False
+    return mx.metal.is_available()
+
+
+def detect_jax():
+    try:
+        import jax
+    except ImportError:
+        return False
+    return True
+
+
+def detect_torch_cuda():
+    import torch
+    return torch.cuda.is_available()
+
+
+def clear_gpu_cache():
+    if detect_cuda():
+        import cupy
+        cupy.cuda.Device().synchronize()
+        cupy.get_default_memory_pool().free_all_blocks()
+        cupy.get_default_pinned_memory_pool().free_all_blocks()
+    if detect_jax():
+        import jax
+        [buf.delete() for buf in jax.live_arrays()]
+    if detect_torch_cuda():
+        import torch
+        torch.cuda.empty_cache()

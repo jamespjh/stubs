@@ -23,6 +23,7 @@ dependencies = [
     "jax;platform_system != 'Darwin'", "jax[cuda13];platform_system != 'Darwin'", # if not on Apple Silicon, just JAX
     "cupy;platform_system != 'Darwin'", # if not on Apple Silicon,  CuPy
     "mlx;platform_system == 'Darwin'", # if on Apple Silicon, MLX
+    "torch"
 ]
 
 [project.optional-dependencies]

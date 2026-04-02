@@ -4,6 +4,7 @@ import logging
 from multiply.payloads import matrix_at_size
 from multiply.payloads import multiply_matrices
 from multiply.benchmark import benchmark_engine
+from .array_abstraction import detect_cuda, detect_metal, detect_jax
 
 logger = logging.getLogger(__name__)
 
@@ -33,20 +34,27 @@ def multiply_results(size):
     jaxc = matmul(size, 'jax-cpu')
     logger.info("Using JAX GPU backend")
     jaxg = matmul(size, 'jax-gpu')
+    logger.info("Using torch CPU backend")
+    torch = matmul(size, 'torch-cpu')
     print("Engine: Time/s:")
     print("---------------")
     print(f"Python : {python:.3g}")
     print(f"NumPy  : {numpy:.3g}")
     print(f"Numba  : {numba:.3g}")
+    print(f"Torch  : {torch:.3g}")
     print(f"JAX-CPU: {jaxc:.3g}")
     print(f"JAX-GPU: {jaxg:.3g}")
     if detect_cuda():
         logger.info("Using CUDA backend")
         cupy = matmul(size, 'cupy')
+        logger.info("Using torch GPU backend")
+        torch_gpu = matmul(size, 'torch-gpu')
         print(f"CuPy   : {cupy:.3g}")
+        print(f"Trch-GP: {torch_gpu:.3g}")
     else:
-        logger.info("CUDA not detected, skipping CuPy benchmark")
+        logger.info("CUDA not detected, skipping CuPy and torch-cuda benchmarks")
         print("CuPy   : n/a")
+        print("Trch-GP: n/a")
     if detect_metal():
         logger.info("Using Metal backend")
         metal = matmul(size, 'mlx')
@@ -54,31 +62,6 @@ def multiply_results(size):
     else:
         logger.info("Metal not detected, skipping Metal benchmark")
         print("Metal  : n/a")
-
-
-def detect_cuda():
-    try:
-        import cupy
-    except ImportError:
-        return False
-    return cupy.cuda.is_available()
-
-
-def detect_metal():
-    try:
-        import mlx.core as mx
-    except ImportError:
-        return False
-    return mx.metal.is_available()
-
-
-def detect_jax():
-    try:
-        pass
-    except ImportError:
-        return False
-    return True
-
 
 def matmul(size, engine):
     x = matrix_at_size(size, engine)

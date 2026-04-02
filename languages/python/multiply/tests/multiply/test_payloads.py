@@ -1,6 +1,5 @@
-# Requires some complex mocking to test properly
 
-# Just testing the engines that work without GPU
+from multiply.multiply import detect_cuda, detect_metal
 
 def t_payload(engine):
     from multiply.payloads import multiply_at_size
@@ -21,6 +20,18 @@ def test_payload_python():
 def test_payload_numpy():
    t_payload('numpy')
 
+def test_payload_torch():
+    t_payload('torch-cpu')
+
+if detect_cuda():
+    def test_payload_torch_gpu():
+        t_payload('torch-gpu')
+
+    def test_payload_cupy():
+        t_payload('cupy')
+
+    def test_payload_jax_gpu():
+        t_payload('jax-gpu')
 
 def test_payload_jax():
     t_payload('jax-cpu')
